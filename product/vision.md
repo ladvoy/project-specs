@@ -1,8 +1,8 @@
-# Vision: Ladovy — "the one who keeps the home in harmony"
+# Vision: Ladvoy — "the one who keeps the home in harmony"
 
 ## Product
 
-Ladovy is an easily configurable, accessible RAG for families: upload your documents and answer a few simple questions → get **your family brain** that remembers who is allergic to what, tastes, contracts, warranties, family stories — and answers with links to your documents, anywhere: in our bot, in Telegram, in any LLM you choose.
+Ladvoy is an easily configurable, accessible RAG for families: upload your documents and answer a few simple questions → get **your family brain** that remembers who is allergic to what, tastes, contracts, warranties, family stories — and answers with links to your documents, anywhere: in our bot, in Telegram, in any LLM you choose.
 
 **We don't sell an LLM.** We sell an easily configurable RAG that connects to any model the user chose and paid for (Claude, ChatGPT, Alisa, GigaChat, local models). Turnkey add-on services (we wire in a model via API, the client pays per token) are separate and optional.
 

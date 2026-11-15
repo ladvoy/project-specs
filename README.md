@@ -1,6 +1,6 @@
 # project-specs
 
-The single source of truth for the **Ladovy** project: vision, shared language, invariants, cross-repo contracts, architecture, and decisions.
+The single source of truth for the **Ladvoy** project: vision, shared language, invariants, cross-repo contracts, architecture, and decisions.
 
 This is the L1 knowledge layer: every agent session and every repository of the project vendors its shared knowledge from here. **Component behavior specs do NOT live here** — they live in their own repos (`openspec/specs/`) and travel as deltas in the same PRs as code.
 
@@ -30,4 +30,6 @@ This repo holds only what **does not belong to a single component**: language, i
 
 [CC-BY-4.0](./LICENSE) — documentation and standards must be freely shareable with attribution.
 
-Ladovy — "the one who keeps the home in harmony."
+Ladvoy — "the one who keeps the home in harmony."
+
+© 2026 Boris Bogdanovich
