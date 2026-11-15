@@ -1,36 +1,36 @@
-# Глоссарий — единый язык проекта
+# Glossary — the shared language
 
-Каждый агент и человек прежде работы читает этот файл. Термин вне глоссария — кандидат на добавление сюда, а не на локальное изобретение.
+Every agent and human reads this file before working on the project. A term missing from this glossary is a candidate for adding here, not for local invention.
 
-## Сущности и память
+## Entities and memory
 
-- **Проект (project)** — один деплой мозга: одна семья, один человек или одна команда. Типы: `personal | family | smb | company` (пресеты ролей и политик).
-- **Актёр (actor)** — человек (или service-роль `system`), от чьего имени идёт запрос. Определяет доступ. Передаётся заголовком `X-Brain-Actor`.
-- **Сущность (entity) / Портрет** — карточка: человек, питомец, место, организация, вещь, проект, тема, событие. Поле `extensions` — для всего вне спеки (правило карточек V3: неизвестное сохраняется, своё — только внутри extensions).
-- **Факт (fact)** — атом памяти: одна мысль. Обязателен `source` (provenance). Поля `valid_from/valid_to` — когда был верен в мире (bi-temporal).
-- **Домен (domain)** — жизненная область факта (еда, здоровье, хобби, финансы…). Набор доменов расширяется пользователем.
-- **Полярность (polarity)** — `like | dislike | neutral`.
-- **Строгость (strictness)** — `hard` (табу, никогда в рекомендации) / `soft` (предпочтение) / `info` (просто знание). Только `dislike` имеет strictness.
-- **Audience** — права доступа факта: `everyone | adults | owner | allow_list | role`. **Fail-closed**: нет audience → виден только owner.
-- **child_view** — возраст-соответствующая замена факта для тех, кто не прошёл gate. Дозировка, не ложь: сущность факта сохраняется. Нет child_view — факт детям не показывается вовсе.
-- **Constant core (постоянное ядро)** — факты, всегда в контексте (аллергии, hard-табу). Лимит ~500–1000 токенов на сущность. Ядро бывает разным для разных ролей.
-- **Keys** — ключевые слова-триггеры факта (механика lorebook). Вспомогательны к семантике и интенту.
-- **Open questions** — «чего мы ещё не знаем»; топливо анкеты-визарда.
-- **Sharing: hold** — «личная записка с отложенным раскрытием»: владелец разрешает раскрыть позже; третьим лицам — отказ. Ревизия раз в месяц.
-- **Proposal / pending** — факт-кандидат из извлечения или диалога; становится фактом после подтверждения владельца.
+- **Project** — one brain deployment: one family, one person, or one team. Types: `personal | family | smb | company` (role/policy presets).
+- **Actor** — the human (or the `system` service role) on whose behalf a request is made. Determines access. Passed as the `X-Brain-Actor` header.
+- **Entity / Portrait card** — a card: person, pet, place, organization, asset, project, topic, event. The `extensions` field holds anything outside the spec (Character Card V3 rule: unknown fields are preserved; own fields only inside extensions).
+- **Fact** — the memory atom: one thought. Requires `source` (provenance). `valid_from/valid_to` — when it was true in the world (bi-temporal).
+- **Domain** — a life area of a fact (food, health, hobbies, finances…). Users can add domains.
+- **Polarity** — `like | dislike | neutral`.
+- **Strictness** — `hard` (taboo, never in recommendations) / `soft` (avoid when alternatives exist) / `info` (plain knowledge). Only `dislike` carries strictness.
+- **Audience** — fact access rights: `everyone | adults | owner | allow_list | role`. **Fail-closed**: no audience → visible to the owner only.
+- **child_view** — an age-appropriate substitution of a fact for those who fail the gate. Dosing, not lying: the essence survives. No child_view → hidden from children entirely.
+- **Constant core** — facts always in context (allergies, hard taboos). Limit ~500–1000 tokens per entity. Cores can differ per role (adult/child versions).
+- **Keys** — keyword triggers on a fact (lorebook mechanics). Auxiliary to semantics and intent, never the only path.
+- **Open questions** — "what we don't know yet"; fuel for the onboarding wizard.
+- **Sharing: hold** — "a private note with delayed disclosure": the owner may allow disclosure later; to third parties — refusal. Reviewed monthly.
+- **Proposal / pending** — a candidate fact from extraction or conversation; becomes a fact after the owner confirms.
 
-## Механика
+## Mechanics
 
-- **Assembly (сборка)** — детерминированный код `POST /context`: entity-match → интент → фильтр аудитории → подстановка child_view → constant core → ранжирование (relevance+importance+recency) → бюджет. **Изоляция только на входе.**
-- **Audit** — журнал каждой сборки и записи: что вошло, что отрезано и почему, что подменено. Сборка без аудита не соответствует спеке.
-- **Ingestion** — write-путь: загрузка документов → OCR → чанки → факты-кандидаты (pending).
-- **Golden-тесты** — исполняемые сценарии изоляции на эталоне (семья Картеров): «Ребекка не видит простатит», «Роуз не видит записку Бекки». CI-гейт ядра.
-- **Мозг (brain)** — headless API памяти. **Мозг не вызывает LLM** — собирает контекст; думает клиентская модель.
-- **Дво́рецкий** — агент-посредник (Hermes-профиль/TG-бот), клиент мозга; голос и манеры — его, знания и права — мозга.
-- **Семейный чартер (charter)** — соглашение семьи о приватности и единственном исключении (безопасность).
-- **Лад** — короткая форма имени продукта в речи («добавим в Лад»).
+- **Assembly** — deterministic code behind `POST /context`: entity match → intent → audience filter → child_view substitution → constant core → ranking (relevance+importance+recency) → budget. **Isolation at input only.**
+- **Audit** — the log of every assembly and every write: what was included, what was excluded and why, what was substituted. Assembly without audit does not conform.
+- **Ingestion** — the write path: document upload → OCR → chunks → pending candidate facts.
+- **Golden tests** — executable isolation scenarios on the reference example (the Carter family): "Rebecca must not see the prostatitis fact", "Rose must not see Becca's note". CI gate of the core.
+- **Brain** — the headless memory API. **The brain never calls an LLM** — it assembles context; the client-side model does the thinking.
+- **Butler** — the agent in the middle (Hermes profile / TG bot): voice and manners are its; knowledge and rights are the brain's.
+- **Charter** — the family agreement on privacy and the single exception (safety).
+- **Lad** — the informal short name of the product in speech ("add it to Lad").
 
-## Не путать
+## Don't confuse
 
-- «спека формата» (portrait-spec, внешний стандарт) ≠ «спека проекта» (этот репо) ≠ «поведенческая спека компонента» (openspec в его репо).
-- `hard` dislike ≠ отказ темы: табу влияет на **рекомендации**, но прямой вопрос ребёнка по health-факту обслуживается через `child_view`.
+- "the format spec" (portrait-spec, the external standard) ≠ "the project spec" (this repo) ≠ "a component behavior spec" (openspec in its own repo).
+- `hard` dislike ≠ refusing a topic: a taboo affects **recommendations**, but a child's direct question about a health fact is served through `child_view`.

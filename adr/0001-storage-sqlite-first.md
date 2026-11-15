@@ -1,13 +1,13 @@
-# ADR-0001: Хранение — SQLite-first
+# ADR-0001: Storage — SQLite-first
 
-Статус: принято (15.11.2026)
+Status: accepted (2026-11-15)
 
-## Контекст
-Один деплой = один проект (семья). Нужны: экспорт «всё в одном файле», нулевой ops на старте, полнотекстовый поиск, позже — семантика и мультитенантность.
+## Context
+One deployment = one project (a family). Requirements: "everything in one file" export, zero ops at the start, full-text search, later — semantics and multi-tenancy.
 
-## Решение
-SQLite (WAL) per project: JSON-колонки для карточек/фактов, FTS5 для поиска, файл = бэкап/перенос. Семантический поиск v0 — sqlite-vec или FTS+морфология. Postgres + JSONB + pgvector — при облачной фазе; схема переносится механически.
+## Decision
+SQLite (WAL) per project: JSON columns for cards/facts, FTS5 for search; the file is the backup/transfer unit. Semantic search in v0 — sqlite-vec or FTS+morphology. Postgres + JSONB + pgvector at the cloud stage; the schema migrates mechanically.
 
-## Последствия
-+ Нулевой ops, экспорт = копия файла, self-host без БД-администрирования.
-− Параллельные записи нескольких акторов — ограничены WAL (приемлемо для семьи), миграция на Postgres обязательна до компании-пресета.
+## Consequences
++ Zero ops; export = copying a file; self-host without DB administration.
+− Concurrent writes by several actors are limited by WAL (fine for a family); Postgres migration is mandatory before the company preset.

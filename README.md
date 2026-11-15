@@ -1,33 +1,33 @@
 # project-specs
 
-Центральная правда проекта **Ladovy** (Ладовой): видение, единый язык, инварианты, межреповые контракты, архитектура и решения.
+The single source of truth for the **Ladovy** project: vision, shared language, invariants, cross-repo contracts, architecture, and decisions.
 
-Это — L1-слой знаний (см. [SDD-подход](./architecture.md)): все агентские сессии и все репозитории проекта вендорят отсюда общие знания. **Здесь НЕ живут поведенческие спеки отдельных компонентов** — они в своих репо (`openspec/specs/`) и едут дельтами в тех же PR, что и код.
+This is the L1 knowledge layer: every agent session and every repository of the project vendors its shared knowledge from here. **Component behavior specs do NOT live here** — they live in their own repos (`openspec/specs/`) and travel as deltas in the same PRs as code.
 
-## Структура
+## Layout
 
 ```
-product/        — видение, персоны, индекс юзкейсов
-glossary.md     — единый язык проекта (читать каждому агенту и человеку)
-invariants.md   — конституция: неизменяемые правила проекта
-contracts/      — межреповые контракты (OpenAPI, MCP-инструменты, actor-привязка)
-architecture.md — карта репозиториев и потоки данных
-adr/            — архитектурные решения (ADR)
-roadmap.md      — вехи
+product/        — vision, personas, use-case index
+glossary.md     — the shared language (every agent and human reads this first)
+invariants.md   — the constitution: immutable project rules
+contracts/      — cross-repo contracts (OpenAPI, MCP tools, actor binding)
+architecture.md — repo map and data flows
+adr/            — architecture decision records
+roadmap.md      — milestones
 ```
 
-## Правило границы
+## The boundary rule
 
-В этот репо попадает только то, что **не принадлежит одному компоненту**: язык, инварианты, межреповые контракты, архитектура, решения. Всё, что относится к поведению конкретного компонента — живёт рядом с его кодом.
+This repo holds only what **does not belong to a single component**: language, invariants, cross-repo contracts, architecture, decisions. Anything describing a component's behavior lives next to that component's code.
 
-## Как использовать
+## How to use
 
-- Новая агентская сессия в любом репо: читает локальный `AGENTS.md` → вендоренные разделы отсюда (конституция, глоссарий).
-- Вендоринг: копия раздела в репо с комментарием `источник: project-specs@<commit>`. При изменении здесь — чек-лист «обнови вендоры» во всех репо.
-- Контракты из `contracts/` — источник генерации SDK и CI-проверок совместимости (openapi-diff).
+- A new agent session in any repo: reads the local `AGENTS.md` → which points to vendored sections from here (constitution, glossary).
+- Vendoring: a copy of the section in the repo, with a comment `source: project-specs@<commit>`. When this repo changes — run the "update vendors" checklist in all repos.
+- `contracts/` is the source for SDK generation and CI compatibility checks (openapi-diff).
 
-## Лицензия
+## License
 
-[CC-BY-4.0](./LICENSE) — документация и стандарты должны свободно распространяться с атрибуцией.
+[CC-BY-4.0](./LICENSE) — documentation and standards must be freely shareable with attribution.
 
-Ладовой — «тот, кто держит лад дома».
+Ladovy — "the one who keeps the home in harmony."

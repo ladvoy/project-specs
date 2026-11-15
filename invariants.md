@@ -1,29 +1,29 @@
-# Инварианты проекта (конституция)
+# Project invariants (the constitution)
 
-Неизменяемые правила. Любой код, документ или агентская сессия, нарушающие их, — неправы, даже если результат работает. Изменение инварианта — только через ADR и только с объяснением, почему мир изменился.
+Immutable rules. Any code, document, or agent session violating them is wrong, even if the result works. Changing an invariant requires an ADR and an explanation of why the world changed.
 
-## Приватность и доступ
+## Privacy and access
 
-1. **Изоляция только на входе.** Запрещено передавать закрытые факты в LLM с инструкцией «не упоминай». Фильтр аудитории — детерминированный код до модели; модель не видит того, что ей не положено.
-2. **Fail-closed.** Факт без указанных прав виден только владельцу.
-3. **Секреты детей не пересказываются взрослым; секреты взрослых не раскрываются детям.** Пересказ — только по воле владельца (`sharing: hold` + `disclosure_hint`). Владелец секрета получает уведомление о чужом запросе к нему.
-4. **Единственное исключение — безопасность**: темы из `safety_topics` ломают приватность и уведомляют опекунов. Исключение явное, редкое, публично задокументированное в charter.
-5. **Каждая сборка и каждая запись — в audit.** Ответ без возможности проверить «что вошло и почему» не соответствует проекту.
+1. **Isolation at input only.** Passing restricted facts to an LLM with an instruction "don't mention this" is forbidden. The audience filter is deterministic code before the model; the model never sees what it must not see.
+2. **Fail-closed.** A fact without declared rights is visible to the owner only.
+3. **Children's secrets are never retold to adults; adults' secrets are never revealed to children.** Retelling happens only at the owner's will (`sharing: hold` + `disclosure_hint`). The secret's owner is notified when someone else asks about it.
+4. **The single exception is safety**: `safety_topics` (self-harm, violence, threat to life) break privacy and notify guardians. The exception is explicit, rare, and publicly documented in the charter.
+5. **Every assembly and every write goes to audit.** An answer without a verifiable "what was included and why" does not conform.
 
-## Данные
+## Data
 
-6. **Данные принадлежат семье.** Полный экспорт (JSON по спеке + md-проекция) и полное удаление — в любой момент, без поддержки.
-7. **Self-host — право первого дня.** Открытый сервер поднимается дома с полной функциональностью; облако продаёт отсутствие ops, не фичи.
-8. **Облако — данные в РФ, 152-ФЗ.**
+6. **The data belongs to the family.** Full export (spec-compliant JSON + md projection) and full deletion — any time, no support ticket.
+7. **Self-hosting is a day-one right.** The open server runs at home with full functionality; the cloud sells the absence of ops, not features.
+8. **Cloud — data in Russia, 152-FZ compliance.**
 
-## Архитектура
+## Architecture
 
-9. **Мозг не вызывает LLM.** Сборка контекста — детерминированный код; модель выбирает и оплачивает клиент. Мозг provider-agnostic.
-10. **Единственный владелец правды — БД проекта; все writers проходят через API.** Каналы и UI не хранят память.
-11. **Роутинг моделей — по актёру** (каждый платит за свою модель или общий семейный ключ с лимитом).
-12. **Один уточняющий вопрос на ход** — предел терпения пользователя.
+9. **The brain never calls an LLM.** Context assembly is deterministic code; the model is chosen and paid for by the client. The brain is provider-agnostic.
+10. **The project DB is the only source of truth; all writers go through the API.** Channels and UI store no memory.
+11. **Model routing is per actor** (everyone pays for their own model, or a shared family key with a limit).
+12. **One clarifying question per turn** — the limit of user patience.
 
-## Лицензии и бренд
+## Licensing and brand
 
-13. Спека формата — MIT; документация — CC-BY-4.0; ядро, бот, UI — AGPL-3.0; SDK и MCP — MIT; облако и доп-сервисы — проприетарные. Бренд и данные пользователей не открываются.
-14. Изменение формата портретов — только через изменение спеки (semver) и только с миграцией примеров; код следует спеке, не наоборот.
+13. Format spec — MIT; documentation — CC-BY-4.0; core, bot, UI — AGPL-3.0; SDK and MCP — MIT; cloud and add-on services — proprietary. Brand and user data are not opened.
+14. Format changes go through a spec change (semver) with example migration; code follows the spec, not the other way around.

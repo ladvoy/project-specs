@@ -1,18 +1,18 @@
-# ADR-0002: Лицензионная модель — open-core в три слоя
+# ADR-0002: Licensing — three-layer open-core
 
-Статус: принято (15.11.2026)
+Status: accepted (2026-11-15)
 
-## Контекст
-Солопренер + опенсорс: нужен канал дистрибуции и доверия, но и защита от закрытых облачных конкурентов. Подтверждённые кейсы (Plausible, Postiz, Documenso, Bitwarden): free self-host + платное облако работает; перелицензирование MIT→AGPL происходило после появления угрозы — значит, стартовать сразу в copyleft.
+## Context
+A solopreneur + open source: open source is a distribution and trust channel, but we also need protection from closed cloud competitors. Verified cases (Plausible, Postiz, Documenso, Bitwarden): free self-host + paid cloud works; MIT→AGPL relicensing happened *after* the threat appeared — so start in copyleft immediately.
 
-## Решение
-- Спека формата — MIT (стандарт для чужих разработчиков).
-- `project-specs` — CC-BY-4.0 (тексты).
-- Ядро `brain`, `butler-bot`, `web-ui` — **AGPL-3.0** (network clause защищает от закрытых hosted-форков).
-- SDK, MCP, `self-host` — MIT (интеграции и распространение).
-- Облако, доп-сервисы, premium — проприетарные.
-- CLA с первого коммита (дверь к dual-license открыта).
+## Decision
+- Format spec — MIT (a standard for external developers).
+- `project-specs` — CC-BY-4.0 (text).
+- Core `brain`, `butler-bot`, `web-ui` — **AGPL-3.0** (the network clause blocks closed hosted forks).
+- SDK, MCP, `self-host` — MIT (integrations and distribution).
+- Cloud, add-on services, premium — proprietary.
+- CLA from the first commit (the dual-license door stays open).
 
-## Последствия
-+ Сам-host = маркетинг и право первого дня; cloud-конкурент обязан открыть доработки.
-− Нельзя запретить «немодифицированный brain + чужой закрытый фронт» — закрывается доп-сервисами, брендом, экономикой (известный предел open-core).
+## Consequences
++ Self-host = marketing and a day-one right; a cloud competitor must open their changes.
+− We cannot forbid "unmodified brain + someone's closed frontend" — closed by add-on services, trademark, and economics (the known limit of open-core).

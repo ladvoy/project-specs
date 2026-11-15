@@ -1,31 +1,31 @@
-# Межреповые контракты
+# Cross-repo contracts
 
-Источник правды для интерфейсов между компонентами. SDK генерируются из этих контрактов; CI проверяет совместимость (openapi-diff). Меняешь контракт — PR здесь, потом реализации.
+The source of truth for interfaces between components. SDKs are generated from these contracts; CI checks compatibility (openapi-diff). Changing a contract — PR here first, then implementations.
 
 ## Brain API (v0)
 
-Headless, provider-agnostic (мозг не вызывает LLM). OpenAPI: `contracts/brain.openapi.yaml` (генерируется из кода `brain`, вендорится сюда при релизе).
+Headless, provider-agnostic (the brain never calls an LLM). OpenAPI: `contracts/brain.openapi.yaml` (generated from the `brain` code, vendored here on release).
 
-- **Management-плоскость** (`/admin/*`, project-token): проекты, акторы, сущности, факты, связи, proposals, audit.
-- **Query-плоскость** (`/context/*`, context-token + `X-Brain-Actor`): сборка контекста. Ответ = `context` + обязательный `audit` (included / excluded+reason / substitutions).
+- **Management plane** (`/admin/*`, project token): projects, actors, entities, facts, relations, proposals, audit.
+- **Query plane** (`/context/*`, context token + `X-Brain-Actor`): context assembly. Response = `context` + mandatory `audit` (included / excluded+reason / substitutions).
 
-## MCP-инструменты (brain-mcp → brain API)
+## MCP tools (brain-mcp → brain API)
 
-| Инструмент | Endpoint | Семантика |
+| Tool | Endpoint | Semantics |
 |---|---|---|
-| `get_context(query, intent?)` | POST `/context` | actor из привязки; ответ — собранный блок с цитатами |
-| `get_portrait(name)` | GET `/entities?alias=` | карточка сущности |
-| `propose_memory(entity, text, source)` | POST facts (`status: pending`) | кандидат; подтверждение владельцем |
-| `search_audit(...)` | GET `/audit` | журнал (для владельцев) |
+| `get_context(query, intent?)` | POST `/context` | actor from the binding; response is an assembled block with citations |
+| `get_portrait(name)` | GET `/entities?alias=` | entity card |
+| `propose_memory(entity, text, source)` | POST facts (`status: pending`) | candidate; owner confirms |
+| `search_audit(...)` | GET `/audit` | the log (for owners) |
 
-**Правило для описаний инструментов:** «вызывай при любом упоминании людей из семьи, подарков, здоровья, планов» — навигация модели задаётся description'ом, не логикой ядра.
+**Tool description rule:** "call whenever the query mentions family members, gifts, health, plans" — model navigation lives in the description, not in core logic.
 
-## Actor-привязка (каналы)
+## Actor binding (channels)
 
-- Telegram: `telegram_user_id` ↔ actor slug, привязка при онбординге;-child-профиль — PIN.
-- Web (Next.js): login аккаунта = actor; детский — PIN.
-- Brain доверяет только своей таблице привязок; канал не может «назначить» actor, которого нет в проекте.
+- Telegram: `telegram_user_id` ↔ actor slug, bound during onboarding; child profile — PIN.
+- Web (Next.js): account login = actor; child — PIN.
+- The brain trusts only its own binding table; a channel cannot "assign" an actor that is not in the project.
 
-## Формат портретов
+## Portrait format
 
-Внешний стандарт — репо `portrait-spec` (MIT). Ядро хранит факты в форме спеки v0.2; изменение формата — change в `portrait-spec` с миграцией примеров.
+The external standard — the `portrait-spec` repo (MIT). The core stores facts in spec v0.2 form; format changes go through a change in `portrait-spec` with example migration.

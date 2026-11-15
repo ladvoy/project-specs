@@ -1,17 +1,17 @@
-# ADR-0003: Актор-модель и фильтр аудитории на входе
+# ADR-0003: Actor model and input-side audience filtering
 
-Статус: принято (15.11.2026)
+Status: accepted (2026-11-15)
 
-## Контекст
-Базой пользуются все члены семьи с разными правами (секреты детей, медицинское взрослых, wishlist vs дневник). Просить LLM «не упоминай» ненадёжно: утечки под roleplay/инъекциями, модель выбирает пользователь (включая слабые локальные).
+## Context
+The whole family uses the base with different rights (children's secrets, adults' medical facts, wishlist vs diary). Asking an LLM "don't mention this" is unreliable: leaks under roleplay/injection, and the model is chosen by the user (including weak local ones).
 
-## Решение
-- Каждый запрос несёт `X-Brain-Actor`; права проверяет детерминированный код сборки **до** LLM.
-- Факт несёт `audience` на себе (fail-closed: нет — только owner); для непрошедших gate — `child_view`-подстановка, если задана.
-- Constant core собирается по роли актора.
-- Ответ проходит опциональный leak-scan (дословные строки запрещённых фактов) для критичных фактов.
-- Всякая запись через API помечается актором-источником; факты из диалога с ребёнком по умолчанию `owner`.
+## Decision
+- Every request carries `X-Brain-Actor`; rights are enforced by deterministic assembly code **before** the LLM.
+- A fact carries its `audience` (fail-closed: none — owner only); for those failing the gate — a `child_view` substitution, if defined.
+- The constant core is assembled for the actor's role.
+- Responses pass an optional leak-scan (literal strings of denied facts) for critical facts.
+- Every write through the API is tagged with the source actor; facts from a child's dialogue default to `owner`.
 
-## Последствия
-+ Изоляция не видна как «урезанность»: у каждого актора свой цельный мир (child_view).
-− Идентификация актора зависит от канала (TG-привязка/PIN) — честный предел: договор семьи + PIN.
+## Consequences
++ Isolation is invisible as "restriction": each actor gets their own coherent world (child_view).
+− Actor identification depends on the channel (TG binding/PIN) — an honest limit: the family contract + PIN.

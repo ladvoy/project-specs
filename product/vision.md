@@ -1,25 +1,25 @@
-# Видение: Ladovy — «тот, кто держит лад дома»
+# Vision: Ladovy — "the one who keeps the home in harmony"
 
-## Продукт
+## Product
 
-Ладовой — легко настраиваемый доступный RAG для семьи: закинул документы и ответы на простые вопросы → получил **свой семейный мозг**, который помнит состав семьи, аллергии, вкусы, договоры, гарантии, истории — и отвечает со ссылками на ваши документы, где угодно: в нашем боте, в Telegram, в любой выбранной вами LLM.
+Ladovy is an easily configurable, accessible RAG for families: upload your documents and answer a few simple questions → get **your family brain** that remembers who is allergic to what, tastes, contracts, warranties, family stories — and answers with links to your documents, anywhere: in our bot, in Telegram, in any LLM you choose.
 
-**Мы не продаём LLM.** Мы продаём легко настраиваемый RAG, который подключается к любой выбранной и оплаченной пользователем моделью (Claude, ChatGPT, Алиса, GigaChat, локальные). Доп-услуги «под ключ» (мы подключаем модель по API, клиент платит за токены) — отдельно и опционально.
+**We don't sell an LLM.** We sell an easily configurable RAG that connects to any model the user chose and paid for (Claude, ChatGPT, Alisa, GigaChat, local models). Turnkey add-on services (we wire in a model via API, the client pays per token) are separate and optional.
 
-## Кому
+## For whom
 
-- **Семья** (v1-фокус): общий мозг с правами — секреты детей не читаем, медицинское детям дозируем (child_view), важное передаём аккуратно. Тарифы 300–600 ₽.
-- **Я** (personal) — тот же движок с одним актором.
-- **Малый бизнес / компания с командами** — те же механики, пресеты ролей (позже).
+- **Family** (v1 focus): a shared brain with rights — children's secrets are not read, adult health facts are dosed to children (child_view), the important stuff is conveyed gently. Pricing 300–600 ₽.
+- **Me** (personal) — the same engine with a single actor.
+- **Small business / company with teams** — same mechanics, role presets (later).
 
-## Чем лучше бесплатного чата
+## Why better than a free chat
 
-Память (все ваши документы + анкета семьи, а не пять последних сообщений) · портативность (один мозг — в любом чате) · проверяемость (ответ со ссылкой на ваш документ) · общий контекст с правами · RU-слой (рубли, данные в РФ, без посредников).
+Memory (all your documents + the family questionnaire, not the last five messages) · portability (one brain — in any chat) · verifiability (answers link to your documents) · shared context with permissions · the RU layer (rubles, data in Russia, no middlemen).
 
-## Принцип продукта
+## The product principle
 
-Механика «дворецкого»: изоляция на входе контекста, дозировка по возрасту (child_view), слово дво́рцового держится системой, а не просьбой к модели. Полный текст механики — в `invariants.md` и спеке.
+The "butler" mechanic: isolation at context input, age-appropriate dosing (child_view), the butler's word kept by the system — not by begging the model. Full mechanics: `invariants.md` and the spec.
 
-## Каналы
+## Channels
 
-1. Telegram-бот (ядро RU) + веб-чат. 2. MCP для агентов (Claude, Cursor, AI Studio). 3. Публичные боты-визитки (позже). 4. Веб-интерфейс управления (Next.js).
+1. Telegram bot (the RU core) + web chat. 2. MCP for agents (Claude, Cursor, AI Studio). 3. Public "ask my bot" cards (later). 4. Web management UI (Next.js).

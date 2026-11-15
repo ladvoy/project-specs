@@ -1,37 +1,37 @@
-# Архитектура: карта репозиториев и потоки данных
+# Architecture: repo map and data flows
 
-## Репозитории
+## Repositories
 
-| Репо | Лицензия | Содержимое |
+| Repo | License | Contents |
 |---|---|---|
-| `portrait-spec` | MIT | Внешний стандарт формата портретов (спека, JSON Schema, примеры). Внутренние знания проекта — не здесь |
-| `project-specs` (этот) | CC-BY-4.0 | Центральная правда проекта |
-| `brain` | AGPL-3.0 | Ядро: admin-api + context-api + ingestion worker + cron worker (роль `system`) + миграции + golden-тесты + OpenAPI |
-| `brain-mcp` | MIT | MCP-адаптер над `/context` для агентов |
-| `brain-sdk-ts`, `brain-sdk-python` | MIT | Тонкие клиенты API |
-| `butler-bot` | AGPL-3.0 | Telegram-дво́рцкий: каналы, привязка actor↔TG, голос |
-| `web-ui` | AGPL-3.0 | Next.js: регистрация, визарды, управление портретами, audit |
-| `self-host` | MIT | docker-compose «за 10 минут» |
-| `website`, `infra` | приватные | Лендинги, оферта; конфиги/секреты/CI/CD нашего облака |
+| `portrait-spec` | MIT | The external portrait format standard (spec, JSON Schema, examples). Internal project knowledge does NOT live here |
+| `project-specs` (this) | CC-BY-4.0 | The project's single source of truth |
+| `brain` | AGPL-3.0 | Core: admin-api + context-api + ingestion worker + cron worker (role `system`) + migrations + golden tests + OpenAPI |
+| `brain-mcp` | MIT | MCP adapter over `/context` for agents |
+| `brain-sdk-ts`, `brain-sdk-python` | MIT | Thin API clients |
+| `butler-bot` | AGPL-3.0 | Telegram butler: channels, actor↔TG binding, voice |
+| `web-ui` | AGPL-3.0 | Next.js: registration, wizards, portrait management, audit views |
+| `self-host` | MIT | docker-compose "up in 10 minutes" |
+| `website`, `infra` | private | Landing pages, legal; our cloud configs/secrets/CI/CD |
 
-## Потоки данных
+## Data flows
 
 ```
-[члены семьи] → TG → butler-bot ─┐
-[семья] → web-ui ────────────────┼→ brain /context (X-Brain-Actor) → audit
-[Claude/Cursor] → brain-mcp ─────┘         ↑
-[Hermes] → brain-sdk-python ───────────────┘
-[владелец] → web-ui /admin → brain: CRUD + ✓/✗ proposals
-[cron worker] → brain: role=system (hold-ревизия, pending-напоминания)
-[загрузка PDF] → brain: ingestion → pending-факты
+[family members] → TG → butler-bot ─┐
+[family] → web-ui ──────────────────┼→ brain /context (X-Brain-Actor) → audit
+[Claude/Cursor] → brain-mcp ────────┘         ↑
+[Hermes] → brain-sdk-python ──────────────────┘
+[owner] → web-ui /admin → brain: CRUD + ✓/✗ proposals
+[cron worker] → brain: role=system (hold review, pending reminders)
+[PDF upload] → brain: ingestion → pending facts
 ```
 
-**Единственный владелец правды — БД проекта; все writers проходят через API → всё в audit.** Каналы и UI stateless по памяти.
+**The project DB is the only source of truth; all writers go through the API → everything is audited.** Channels and UI are memory-stateless.
 
-## Хранение
+## Storage
 
-v0: SQLite per project (файл = экспорт/бэкап) + FTS5; позже Postgres + JSONB + pgvector (миграция механическая). См. ADR-0001.
+v0: SQLite per project (the file = export/backup) + FTS5; later Postgres + JSONB + pgvector (mechanical migration). See ADR-0001.
 
-## Мультитенантность
+## Multi-tenancy
 
-v0: один деплой = один проект. Облачная оркестрация — контейнер/OS-юзер на семью (гайд Hermes SECURITY.md §2.2), позже.
+v0: one deployment = one project. Cloud orchestration — one container/OS user per family (Hermes SECURITY.md §2.2 guide), later.

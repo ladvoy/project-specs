@@ -1,23 +1,23 @@
-# Дорожная карта
+# Roadmap
 
-## v0 — «дворецкий отвечает» (ядро, сольный dogfood)
-- [ ] `brain`: FastAPI скелет — admin-api + context-api, SQLite, OpenAPI из кода
-- [ ] Golden-тесты изоляции на эталоне Картеров (CI-гейт)
-- [ ] Ingestion v0: файлы → текст → чанки → pending-факты
-- [ ] `brain-mcp` + подключение к Hermes (догфуд: Сценарий 3 в двух ролях)
-- [ ] `project-specs` + `portrait-spec` опубликованы (этот репо уже здесь)
+## v0 — "the butler answers" (core, solo dogfood)
+- [ ] `brain`: FastAPI skeleton — admin-api + context-api, SQLite, OpenAPI from code
+- [ ] Golden isolation tests on the Carter reference (CI gate)
+- [ ] Ingestion v0: files → text → chunks → pending facts
+- [ ] `brain-mcp` + connecting to Hermes (dogfood: Scenario 3 in two roles)
+- [ ] `project-specs` + `portrait-spec` published (this repo is already here)
 
-## v1 — «семья пользуется» (закрытая бета)
-- [ ] `butler-bot`: TG-канал, actor-привязка, child_view-сборка
-- [ ] Анкета-визард (open_questions) + propose_memory с подтверждением
-- [ ] `web-ui` (Next.js): регистрация, визарды, портреты, audit-просмотр
-- [ ] `self-host`: compose «за 10 минут»
-- [ ] Семантический поиск + ранжирование (relevance/importance/recency)
+## v1 — "the family uses it" (closed beta)
+- [ ] `butler-bot`: TG channel, actor binding, child_view assembly
+- [ ] Onboarding questionnaire (open_questions) + propose_memory with confirmation
+- [ ] `web-ui` (Next.js): registration, wizards, portraits, audit views
+- [ ] `self-host`: compose "up in 10 minutes"
+- [ ] Semantic search + ranking (relevance/importance/recency)
 
-## v2 — «за пределами семьи»
-- [ ] Облако: контейнер на семью, биллинг, домен
-- [ ] Доп-сервисы 🔧: веб-поиск, мероприятия, HR-бот
-- [ ] company-пресет: роли, разделы, SSO
-- [ ] Локализации: бренд-обёртки по фольклору рынков (Довлат, «ангел дома»…)
+## v2 — "beyond the family"
+- [ ] Cloud: one container per family, billing, domain
+- [ ] Add-on services 🔧: web search, local events, HR bot
+- [ ] company preset: roles, sections, SSO
+- [ ] Localizations: folklore brand wrappers per market (Dovlat, "home angel"…)
 
-Порядок и объёмы — см. `brain-api-v0.md` во внутреннем архиве; детали уточняются через SDD-пайплайн (Spec Kit при рождении компонента, OpenSpec в потоке).
+Ordering and scope — see the internal archive; details are refined through the SDD pipeline (Spec Kit when a component is born, OpenSpec in the steady flow).
