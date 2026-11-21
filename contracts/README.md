@@ -7,7 +7,7 @@ The source of truth for interfaces between components. SDKs are generated from t
 Headless, provider-agnostic (the brain never calls an LLM).
 
 OpenAPI: [`brain.openapi.yaml`](./brain.openapi.yaml)  
-`source: ladvoy/brain` — `specs/001-brain-core/contracts/openapi.yaml` @ `df435ab` (served live at `/openapi.json`).
+`source: ladvoy/brain` — `specs/001-brain-core/contracts/openapi.yaml` (includes ingest jobs from `002-ingestion`; served live at `/openapi.json`).
 
 Base path: `/v1`.
 

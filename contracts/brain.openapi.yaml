@@ -13,7 +13,7 @@ info:
     The brain returns **structured context blocks** — never natural-language answers (FR-025).
     Deterministic assembly; the brain never calls an LLM (I10); fail-closed everywhere (D2).
 
-    Cross-repo source for SDKs and openapi-diff CI. The brain also serves this contract at `/openapi.json` (FR-022).
+    Draft contract: final shapes are refined during implementation (task 0.7) and served at `/openapi.json` (FR-022).
 servers:
   - url: /v1
 
@@ -376,6 +376,48 @@ paths:
                 type: array
                 items: { $ref: '#/components/schemas/AuditEntry' }
 
+  /projects/{projectId}/ingest:
+    parameters:
+      - { $ref: '#/components/parameters/projectId' }
+    post:
+      summary: Enqueue a document ingest job (FR-101)
+      operationId: createIngestJob
+      security: [ { adminAuth: [] } ]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, card]
+              properties:
+                file: { type: string, format: binary }
+                card: { type: string, description: Target card slug }
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/IngestJob' }
+        '401': { description: Unauthorized }
+        '422': { $ref: '#/components/responses/ValidationError' }
+
+  /projects/{projectId}/ingest/{jobId}:
+    parameters:
+      - { $ref: '#/components/parameters/projectId' }
+      - { name: jobId, in: path, required: true, schema: { type: string, format: uuid } }
+    get:
+      summary: Ingest job status (FR-108)
+      operationId: getIngestJob
+      security: [ { adminAuth: [] } ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/IngestJob' }
+        '404': { $ref: '#/components/responses/NotFound' }
+
   /projects/{projectId}/context:
     parameters:
       - { $ref: '#/components/parameters/projectId' }
@@ -607,6 +649,22 @@ components:
         kind: { type: string, description: assembly | mutation | delete | inquiry | failed_auth }
         object: { type: string }
         details: { type: object }
+    IngestJob:
+      type: object
+      required: [id, status, card]
+      properties:
+        id: { type: string, format: uuid }
+        card: { type: string }
+        filename: { type: string }
+        status: { type: string, enum: [queued, running, completed, failed] }
+        summary:
+          type: object
+          properties:
+            chunks: { type: integer }
+            created: { type: integer }
+            skipped: { type: integer }
+            error: { type: string }
+            reason: { type: string }
     Error:
       type: object
       required: [message]
