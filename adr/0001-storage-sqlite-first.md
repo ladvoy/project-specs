@@ -1,6 +1,6 @@
 # ADR-0001: Storage — SQLite-first
 
-Status: accepted (2026-11-15)
+Status: superseded by [ADR-0004](0004-storage-postgres-paradedb.md) (2026-11-21); was accepted 2026-11-15
 
 ## Context
 One deployment = one project (a family). Requirements: "everything in one file" export, zero ops at the start, full-text search, later — semantics and multi-tenancy.
