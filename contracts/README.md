@@ -4,28 +4,41 @@ The source of truth for interfaces between components. SDKs are generated from t
 
 ## Brain API (v0)
 
-Headless, provider-agnostic (the brain never calls an LLM). OpenAPI: `contracts/brain.openapi.yaml` (generated from the `brain` code, vendored here on release).
+Headless, provider-agnostic (the brain never calls an LLM).
 
-- **Management plane** (`/admin/*`, project token): projects, actors, entities, facts, relations, proposals, audit.
-- **Query plane** (`/context/*`, context token + `X-Brain-Actor`): context assembly. Response = `context` + mandatory `audit` (included / excluded+reason / substitutions).
+OpenAPI: [`brain.openapi.yaml`](./brain.openapi.yaml)  
+`source: ladvoy/brain` — `specs/001-brain-core/contracts/openapi.yaml` @ `df435ab` (served live at `/openapi.json`).
+
+Base path: `/v1`.
+
+| Plane | Auth | Paths | Consumers |
+|---|---|---|---|
+| **Privileged** | Bearer project (admin) token | `/projects/{id}/…` admin CRUD, import/export, proposals, audit | web-ui admin, internal bots (`system`) |
+| **Query** | Bearer context token + `X-Brain-Principal` | `POST /projects/{id}/context` | butler-bot, brain-mcp, user views |
+
+Response of `/context` = structured context block (`facts`, `notes`, `audit`) — never a natural-language answer. Audit lists included / excluded+reason / substitutions.
+
+Re-vendor checklist: when brain's OpenAPI changes, copy into this file, bump the `source:` commit above, open a PR here before dependent SDKs.
 
 ## MCP tools (brain-mcp → brain API)
 
 | Tool | Endpoint | Semantics |
 |---|---|---|
-| `get_context(query, intent?)` | POST `/context` | actor from the binding; response is an assembled block with citations |
-| `get_portrait(name)` | GET `/entities?alias=` | entity card |
-| `propose_memory(entity, text, source)` | POST facts (`status: pending`) | candidate; owner confirms |
-| `search_audit(...)` | GET `/audit` | the log (for owners) |
+| `get_context(query, intent?)` | `POST /v1/projects/{id}/context` | principal from the channel binding; assembled block + audit |
+| `get_portrait(slug)` | `GET /v1/projects/{id}/cards/{slug}` | card with facts (admin token) or future read path |
+| `propose_memory(card, text, source?)` | `POST …/cards/{slug}/facts` | `status: pending` when source missing; owner confirms |
+| `search_audit(...)` | `GET /v1/projects/{id}/audit` | append-only log |
 
 **Tool description rule:** "call whenever the query mentions family members, gifts, health, plans" — model navigation lives in the description, not in core logic.
 
-## Actor binding (channels)
+## Principal binding (channels)
 
-- Telegram: `telegram_user_id` ↔ actor slug, bound during onboarding; child profile — PIN.
-- Web (Next.js): account login = actor; child — PIN.
-- The brain trusts only its own binding table; a channel cannot "assign" an actor that is not in the project.
+Channels resolve a human to a **principal slug** and send it as `X-Brain-Principal`. The brain does not identify people.
+
+- Telegram: `telegram_user_id` ↔ principal slug (onboarding); child profile — PIN.
+- Web: account login = principal; child — PIN.
+- The brain trusts only its own principals table; a channel cannot invent a principal that is not in the project. Unknown slug → fail-closed everyone-only assembly (FR-002).
 
 ## Portrait format
 
-The external standard — the `portrait-spec` repo (MIT). The core stores facts in spec v0.2 form; format changes go through a change in `portrait-spec` with example migration.
+The external standard — the [`portrait-spec`](https://github.com/ladvoy/portrait-spec) repo (MIT). The brain imports/exports conforming project JSON. Format changes go through `portrait-spec` (semver + example migration); code follows the spec.
